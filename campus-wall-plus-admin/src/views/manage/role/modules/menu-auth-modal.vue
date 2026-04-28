@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, shallowRef, watch } from 'vue';
-import { fetchGetAllPages, fetchGetMenuTree } from '@/service/api';
+import { fetchGetAllPages, fetchGetMenuTree, fetchGetRoleMenuIds, fetchUpdateRoleMenuIds } from '@/service/api';
 import { $t } from '@/locales';
 
 defineOptions({ name: 'MenuAuthModal' });
@@ -25,10 +25,7 @@ const title = computed(() => $t('common.edit') + $t('page.manage.role.menuAuth')
 const home = shallowRef('');
 
 async function getHome() {
-  // eslint-disable-next-line no-console
-  console.log(props.roleId);
-
-  home.value = 'home';
+  home.value = pages.value[0] || '';
 }
 
 const pages = shallowRef<string[]>([]);
@@ -63,34 +60,24 @@ async function getTree() {
 const checks = shallowRef<number[]>([]);
 
 async function getChecks() {
-  // eslint-disable-next-line no-console
-  console.log(props.roleId);
-  // request
-  checks.value = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21];
-}
+  const { error, data } = await fetchGetRoleMenuIds(props.roleId);
 
-function checkChange(val: number) {
-  const idx = checks.value.indexOf(val);
-  if (idx === -1) {
-    checks.value.push(val);
-  } else {
-    checks.value.splice(idx, 1);
+  if (!error) {
+    checks.value = data;
   }
 }
 
-function handleSubmit() {
-  // eslint-disable-next-line no-console
-  console.log(checks.value, props.roleId);
-  // request
+async function handleSubmit() {
+  await fetchUpdateRoleMenuIds(props.roleId, checks.value);
 
   window.$message?.success?.($t('common.modifySuccess'));
 
   closeModal();
 }
 
-function init() {
+async function init() {
+  await getPages();
   getHome();
-  getPages();
   getTree();
   getChecks();
 }
@@ -117,7 +104,6 @@ watch(visible, val => {
       show-checkbox
       class="h-280px overflow-y-auto"
       :default-checked-keys="checks"
-      @check-change="checkChange"
     />
     <template #footer>
       <ElSpace class="w-full justify-end">

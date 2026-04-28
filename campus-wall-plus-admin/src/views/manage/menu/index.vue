@@ -5,7 +5,7 @@ import { ElButton, ElPopconfirm, ElTag } from 'element-plus';
 import { useBoolean } from '@sa/hooks';
 import { yesOrNoRecord } from '@/constants/common';
 import { enableStatusRecord, menuTypeRecord } from '@/constants/business';
-import { fetchGetAllPages, fetchGetMenuList } from '@/service/api';
+import { fetchDeleteMenu, fetchGetAllPages, fetchGetMenuList } from '@/service/api';
 import { defaultTransform, useTableOperate, useUIPaginatedTable } from '@/hooks/common/table';
 import { $t } from '@/locales';
 import SvgIcon from '@/components/custom/svg-icon.vue';
@@ -143,15 +143,13 @@ function handleAdd() {
 }
 
 async function handleBatchDelete() {
-  // request
+  await Promise.all(checkedRowKeys.value.map(id => fetchDeleteMenu(Number(id))));
 
   onBatchDeleted();
 }
 
-function handleDelete(id: number) {
-  // eslint-disable-next-line no-console
-  console.log(id);
-  // request
+async function handleDelete(id: number) {
+  await fetchDeleteMenu(id);
 
   onDeleted();
 }
@@ -213,7 +211,7 @@ init();
           class="sm:h-full"
           :data="data"
           row-key="id"
-          @selection-change="checkedRowKeys = $event"
+          @selection-change="checkedRowKeys = $event.map((item: Api.SystemManage.Menu) => String(item.id))"
         >
           <ElTableColumn v-for="col in columns" :key="col.prop" v-bind="col" />
         </ElTable>

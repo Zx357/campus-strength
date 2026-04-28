@@ -1,8 +1,8 @@
 <script setup lang="tsx">
 import { ref } from 'vue';
 import { ElButton, ElPopconfirm, ElTag } from 'element-plus';
-import { enableStatusRecord, userGenderRecord } from '@/constants/business';
-import { fetchGetUserList } from '@/service/api';
+import { enableStatusRecord } from '@/constants/business';
+import { fetchDeleteUser, fetchGetUserList } from '@/service/api';
 import { defaultTransform, useTableOperate, useUIPaginatedTable } from '@/hooks/common/table';
 import { $t } from '@/locales';
 import UserOperateDrawer from './modules/user-operate-drawer.vue';
@@ -42,28 +42,9 @@ const { columns, columnChecks, data, getData, getDataByPage, loading, mobilePagi
     { prop: 'selection', type: 'selection', width: 48 },
     { prop: 'index', type: 'index', label: $t('common.index'), width: 64 },
     { prop: 'userName', label: $t('page.manage.user.userName'), minWidth: 100 },
-    {
-      prop: 'userGender',
-      label: $t('page.manage.user.userGender'),
-      width: 100,
-      formatter: row => {
-        if (row.userGender === undefined) {
-          return '';
-        }
-
-        const tagMap: Record<Api.SystemManage.UserGender, UI.ThemeColor> = {
-          1: 'primary',
-          2: 'danger'
-        };
-
-        const label = $t(userGenderRecord[row.userGender]);
-
-        return <ElTag type={tagMap[row.userGender]}>{label}</ElTag>;
-      }
-    },
     { prop: 'nickName', label: $t('page.manage.user.nickName'), minWidth: 100 },
     { prop: 'userPhone', label: $t('page.manage.user.userPhone'), width: 120 },
-    { prop: 'userEmail', label: $t('page.manage.user.userEmail'), minWidth: 200 },
+    { prop: 'roleCode', label: $t('page.manage.role.roleCode'), minWidth: 160 },
     {
       prop: 'status',
       label: $t('page.manage.user.userStatus'),
@@ -121,17 +102,13 @@ const {
 } = useTableOperate(data, 'id', getData);
 
 async function handleBatchDelete() {
-  // eslint-disable-next-line no-console
-  console.log(checkedRowKeys.value);
-  // request
+  await Promise.all(checkedRowKeys.value.map(id => fetchDeleteUser(Number(id))));
 
   onBatchDeleted();
 }
 
-function handleDelete(id: number) {
-  // eslint-disable-next-line no-console
-  console.log(id);
-  // request
+async function handleDelete(id: number) {
+  await fetchDeleteUser(id);
 
   onDeleted();
 }
@@ -170,7 +147,7 @@ function edit(id: number) {
           class="sm:h-full"
           :data="data"
           row-key="id"
-          @selection-change="checkedRowKeys = $event"
+          @selection-change="checkedRowKeys = $event.map((item: Api.SystemManage.User) => String(item.id))"
         >
           <ElTableColumn v-for="col in columns" :key="col.prop" v-bind="col" />
         </ElTable>

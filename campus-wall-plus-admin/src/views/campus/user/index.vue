@@ -50,9 +50,8 @@
               <ElButton link type="primary">角色</ElButton>
               <template #dropdown>
                 <ElDropdownMenu>
-                  <ElDropdownItem command="TENANT_ADMIN">学校管理员</ElDropdownItem>
-                  <ElDropdownItem command="TENANT_AUDITOR">审核员</ElDropdownItem>
                   <ElDropdownItem command="STUDENT">学生</ElDropdownItem>
+                  <ElDropdownItem command="GUEST">游客</ElDropdownItem>
                 </ElDropdownMenu>
               </template>
             </ElDropdown>
@@ -89,9 +88,8 @@
         </ElFormItem>
         <ElFormItem label="角色">
           <ElSelect v-model="form.roleCode">
-            <ElOption label="学校管理员" value="TENANT_ADMIN" />
-            <ElOption label="审核员" value="TENANT_AUDITOR" />
             <ElOption label="学生" value="STUDENT" />
+            <ElOption label="游客" value="GUEST" />
           </ElSelect>
         </ElFormItem>
       </ElForm>
@@ -134,7 +132,7 @@ function authText(status: number) {
 async function fetchData() {
   loading.value = true;
   try {
-    const data: any = await campusApi.page('/api/admin/user', query);
+    const data: any = await campusApi.userAppPage(query);
     records.value = data?.records || [];
     total.value = data?.total || 0;
   } finally {

@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { ElButton, ElPopconfirm, ElTag } from 'element-plus';
 import { enableStatusRecord } from '@/constants/business';
-import { fetchGetRoleList } from '@/service/api';
+import { fetchDeleteRole, fetchGetRoleList } from '@/service/api';
 import { defaultTransform, useTableOperate, useUIPaginatedTable } from '@/hooks/common/table';
 import { $t } from '@/locales';
 import RoleOperateDrawer from './modules/role-operate-drawer.vue';
@@ -93,18 +93,13 @@ const {
 } = useTableOperate(data, 'id', getData);
 
 async function handleBatchDelete() {
-  // eslint-disable-next-line no-console
-  console.log(checkedRowKeys.value);
-  // request
+  await Promise.all(checkedRowKeys.value.map(id => fetchDeleteRole(Number(id))));
 
   onBatchDeleted();
 }
 
-function handleDelete(id: number) {
-  // request
-
-  // eslint-disable-next-line no-console
-  console.log(id);
+async function handleDelete(id: number) {
+  await fetchDeleteRole(id);
 
   onDeleted();
 }
@@ -143,7 +138,7 @@ function edit(id: number) {
           class="sm:h-full"
           :data="data"
           row-key="id"
-          @selection-change="checkedRowKeys = $event"
+          @selection-change="checkedRowKeys = $event.map((item: Api.SystemManage.Role) => String(item.id))"
         >
           <ElTableColumn v-for="col in columns" :key="col.prop" v-bind="col" />
         </ElTable>

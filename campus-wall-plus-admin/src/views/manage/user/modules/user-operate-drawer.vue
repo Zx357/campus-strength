@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { enableStatusOptions, userGenderOptions } from '@/constants/business';
-import { fetchGetAllRoles } from '@/service/api';
+import { enableStatusOptions } from '@/constants/business';
+import { fetchCreateUser, fetchGetAllRoles, fetchUpdateUser } from '@/service/api';
 import { useForm, useFormRules } from '@/hooks/common/form';
 import { $t } from '@/locales';
 
@@ -39,7 +39,7 @@ const title = computed(() => {
 
 type Model = Pick<
   Api.SystemManage.User,
-  'userName' | 'userGender' | 'nickName' | 'userPhone' | 'userEmail' | 'userRoles' | 'status'
+  'userName' | 'nickName' | 'userPhone' | 'roleCode' | 'status'
 >;
 
 const model = ref(createDefaultModel());
@@ -47,19 +47,18 @@ const model = ref(createDefaultModel());
 function createDefaultModel(): Model {
   return {
     userName: '',
-    userGender: undefined,
     nickName: '',
     userPhone: '',
-    userEmail: '',
-    userRoles: [],
+    roleCode: 'TENANT_AUDITOR',
     status: undefined
   };
 }
 
-type RuleKey = Extract<keyof Model, 'userName' | 'status'>;
+type RuleKey = Extract<keyof Model, 'userName' | 'roleCode' | 'status'>;
 
 const rules: Record<RuleKey, App.Global.FormRule> = {
   userName: defaultRequiredRule,
+  roleCode: defaultRequiredRule,
   status: defaultRequiredRule
 };
 
@@ -75,15 +74,7 @@ async function getRoleOptions() {
       value: item.roleCode
     }));
 
-    // the mock data does not have the roleCode, so fill it
-    // if the real request, remove the following code
-    const userRoleOptions = model.value.userRoles.map(item => ({
-      label: item,
-      value: item
-    }));
-    // end
-
-    roleOptions.value = [...userRoleOptions, ...options];
+    roleOptions.value = options;
   }
 }
 
@@ -101,8 +92,13 @@ function closeDrawer() {
 
 async function handleSubmit() {
   await validate();
-  // request
-  window.$message?.success($t('common.updateSuccess'));
+  if (props.operateType === 'edit' && props.rowData?.id) {
+    await fetchUpdateUser({ ...model.value, id: props.rowData.id });
+    window.$message?.success($t('common.updateSuccess'));
+  } else {
+    await fetchCreateUser(model.value);
+    window.$message?.success($t('common.addSuccess'));
+  }
   closeDrawer();
   emit('submitted');
 }
@@ -122,27 +118,19 @@ watch(visible, () => {
       <ElFormItem :label="$t('page.manage.user.userName')" prop="userName">
         <ElInput v-model="model.userName" :placeholder="$t('page.manage.user.form.userName')" />
       </ElFormItem>
-      <ElFormItem :label="$t('page.manage.user.userGender')" prop="userGender">
-        <ElRadioGroup v-model="model.userGender">
-          <ElRadio v-for="item in userGenderOptions" :key="item.value" :value="item.value" :label="$t(item.label)" />
-        </ElRadioGroup>
-      </ElFormItem>
       <ElFormItem :label="$t('page.manage.user.nickName')" prop="nickName">
         <ElInput v-model="model.nickName" :placeholder="$t('page.manage.user.form.nickName')" />
       </ElFormItem>
       <ElFormItem :label="$t('page.manage.user.userPhone')" prop="userPhone">
         <ElInput v-model="model.userPhone" :placeholder="$t('page.manage.user.form.userPhone')" />
       </ElFormItem>
-      <ElFormItem :label="$t('page.manage.user.userEmail')" prop="email">
-        <ElInput v-model="model.userEmail" :placeholder="$t('page.manage.user.form.userEmail')" />
-      </ElFormItem>
       <ElFormItem :label="$t('page.manage.user.userStatus')" prop="status">
         <ElRadioGroup v-model="model.status">
           <ElRadio v-for="item in enableStatusOptions" :key="item.value" :value="item.value" :label="$t(item.label)" />
         </ElRadioGroup>
       </ElFormItem>
-      <ElFormItem :label="$t('page.manage.user.userRole')" prop="roles">
-        <ElSelect v-model="model.userRoles" multiple :placeholder="$t('page.manage.user.form.userRole')">
+      <ElFormItem :label="$t('page.manage.user.userRole')" prop="roleCode">
+        <ElSelect v-model="model.roleCode" :placeholder="$t('page.manage.user.form.userRole')">
           <ElOption v-for="{ label, value } in roleOptions" :key="value" :label="label" :value="value" />
         </ElSelect>
       </ElFormItem>

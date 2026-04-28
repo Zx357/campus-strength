@@ -21,6 +21,7 @@ export const campusApi = {
     ratio: () => get<any[]>('/api/admin/dashboard/content-ratio')
   },
   page: (base: string, params: PageQuery) => get<any>(base + '/page', params),
+  userAppPage: (params: PageQuery) => get<any>('/api/admin/user/app-page', params),
   create: (base: string, data: CampusRecord) => post<number>(base + '/create', data),
   update: (base: string, data: CampusRecord) => put<void>(base + '/update', data),
   remove: (base: string, id: number) => del<void>(base + '/delete', { id }),

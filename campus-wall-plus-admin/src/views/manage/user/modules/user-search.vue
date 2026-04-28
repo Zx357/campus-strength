@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { enableStatusOptions, userGenderOptions } from '@/constants/business';
+import { enableStatusOptions } from '@/constants/business';
 import { useForm, useFormRules } from '@/hooks/common/form';
 import { translateOptions } from '@/utils/common';
 import { $t } from '@/locales';
@@ -51,18 +51,6 @@ async function search() {
                 <ElInput v-model="model.userName" :placeholder="$t('page.manage.user.form.userName')" />
               </ElFormItem>
             </ElCol>
-            <ElCol :lg="6" :md="8" :sm="12" :label="$t('page.manage.user.userGender')">
-              <ElFormItem :label="$t('page.manage.user.userGender')" prop="userGender">
-                <ElSelect v-model="model.userGender" clearable :placeholder="$t('page.manage.user.form.userGender')">
-                  <ElOption
-                    v-for="(item, idx) in translateOptions(userGenderOptions)"
-                    :key="idx"
-                    :label="item.label"
-                    :value="item.value"
-                  ></ElOption>
-                </ElSelect>
-              </ElFormItem>
-            </ElCol>
             <ElCol :lg="6" :md="8" :sm="12">
               <ElFormItem :label="$t('page.manage.user.nickName')" prop="nickName">
                 <ElInput v-model="model.nickName" :placeholder="$t('page.manage.user.form.nickName')" />
@@ -74,13 +62,8 @@ async function search() {
               </ElFormItem>
             </ElCol>
             <ElCol :lg="6" :md="8" :sm="12">
-              <ElFormItem :label="$t('page.manage.user.userEmail')" prop="userEmail">
-                <ElInput v-model="model.userEmail" :placeholder="$t('page.manage.user.form.userEmail')" />
-              </ElFormItem>
-            </ElCol>
-            <ElCol :lg="6" :md="8" :sm="12">
               <ElFormItem :label="$t('page.manage.user.userStatus')" prop="userStatus">
-                <ElSelect v-model="model.userGender" clearable :placeholder="$t('page.manage.user.form.userStatus')">
+                <ElSelect v-model="model.status" clearable :placeholder="$t('page.manage.user.form.userStatus')">
                   <ElOption
                     v-for="{ label, value } in translateOptions(enableStatusOptions)"
                     :key="value"

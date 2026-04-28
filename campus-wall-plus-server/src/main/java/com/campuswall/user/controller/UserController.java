@@ -1,9 +1,14 @@
 package com.campuswall.user.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.campuswall.common.controller.CrudController;
+import com.campuswall.common.constant.RoleCodes;
+import com.campuswall.common.dto.PageQuery;
 import com.campuswall.common.dto.StatusDTO;
 import com.campuswall.common.exception.BusinessException;
+import com.campuswall.common.result.PageResult;
 import com.campuswall.common.result.Result;
 import com.campuswall.user.entity.SysUser;
 import com.campuswall.user.service.SysUserService;
@@ -15,6 +20,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/admin/user")
 public class UserController extends CrudController<SysUser> {
+    private static final java.util.List<String> ADMIN_ROLES = java.util.List.of(
+            RoleCodes.PLATFORM_ADMIN,
+            RoleCodes.TENANT_ADMIN,
+            RoleCodes.TENANT_AUDITOR
+    );
+    private static final java.util.List<String> APP_ROLES = java.util.List.of(RoleCodes.STUDENT, RoleCodes.GUEST);
+
     private final SysUserService service;
 
     public UserController(SysUserService service) {
@@ -24,6 +36,16 @@ public class UserController extends CrudController<SysUser> {
     @Override
     protected IService<SysUser> service() {
         return service;
+    }
+
+    @GetMapping("/admin-page")
+    public Result<PageResult<SysUser>> adminPage(PageQuery query) {
+        return Result.success(pageByRoles(query, ADMIN_ROLES));
+    }
+
+    @GetMapping("/app-page")
+    public Result<PageResult<SysUser>> appPage(PageQuery query) {
+        return Result.success(pageByRoles(query, APP_ROLES));
     }
 
     @PutMapping("/ban")
@@ -56,6 +78,23 @@ public class UserController extends CrudController<SysUser> {
             throw new BusinessException("User not found");
         }
         return user;
+    }
+
+    private PageResult<SysUser> pageByRoles(PageQuery query, java.util.List<String> roles) {
+        QueryWrapper<SysUser> wrapper = new QueryWrapper<SysUser>()
+                .in("role_code", roles)
+                .orderByDesc("created_at");
+
+        if (query.getKeyword() != null && !query.getKeyword().isBlank()) {
+            String keyword = query.getKeyword().trim();
+            wrapper.and(w -> w.like("username", keyword)
+                    .or()
+                    .like("nickname", keyword)
+                    .or()
+                    .like("phone", keyword));
+        }
+
+        return PageResult.of(service.page(new Page<>(query.getCurrent(), query.getSize()), wrapper));
     }
 
     @Data

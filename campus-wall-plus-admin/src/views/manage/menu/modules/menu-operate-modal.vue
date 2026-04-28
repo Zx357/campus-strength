@@ -1,7 +1,7 @@
 <script setup lang="tsx">
 import { computed, h, ref, watch } from 'vue';
 import { enableStatusOptions, menuIconTypeOptions, menuTypeOptions } from '@/constants/business';
-import { fetchGetAllRoles } from '@/service/api';
+import { fetchCreateMenu, fetchGetAllRoles, fetchUpdateMenu } from '@/service/api';
 import { useForm, useFormRules } from '@/hooks/common/form';
 import { getLocalIcons } from '@/utils/icon';
 import { $t } from '@/locales';
@@ -257,11 +257,13 @@ async function handleSubmit() {
 
   const params = getSubmitParams();
 
-  // eslint-disable-next-line no-console
-  console.log('params: ', params);
-
-  // request
-  window.$message?.success($t('common.updateSuccess'));
+  if (props.operateType === 'edit' && props.rowData?.id) {
+    await fetchUpdateMenu({ ...params, id: props.rowData.id });
+    window.$message?.success($t('common.updateSuccess'));
+  } else {
+    await fetchCreateMenu(params);
+    window.$message?.success($t('common.addSuccess'));
+  }
   closeDrawer();
   emit('submitted');
 }

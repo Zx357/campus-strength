@@ -2,10 +2,10 @@
 import { computed, ref, watch } from 'vue';
 import { useBoolean } from '@sa/hooks';
 import { enableStatusOptions } from '@/constants/business';
+import { fetchCreateRole, fetchUpdateRole } from '@/service/api';
 import { useForm, useFormRules } from '@/hooks/common/form';
 import { $t } from '@/locales';
 import MenuAuthModal from './menu-auth-modal.vue';
-import ButtonAuthModal from './button-auth-modal.vue';
 
 defineOptions({ name: 'RoleOperateDrawer' });
 
@@ -31,7 +31,6 @@ const visible = defineModel<boolean>('visible', {
 const { formRef, validate, restoreValidation } = useForm();
 const { defaultRequiredRule } = useFormRules();
 const { bool: menuAuthVisible, setTrue: openMenuAuthModal } = useBoolean();
-const { bool: buttonAuthVisible, setTrue: openButtonAuthModal } = useBoolean();
 
 const title = computed(() => {
   const titles: Record<UI.TableOperateType, string> = {
@@ -80,8 +79,13 @@ function closeDrawer() {
 
 async function handleSubmit() {
   await validate();
-  // request
-  window.$message?.success($t('common.updateSuccess'));
+  if (props.operateType === 'edit' && props.rowData?.id) {
+    await fetchUpdateRole({ ...model.value, id: props.rowData.id });
+    window.$message?.success($t('common.updateSuccess'));
+  } else {
+    await fetchCreateRole(model.value);
+    window.$message?.success($t('common.addSuccess'));
+  }
   closeDrawer();
   emit('submitted');
 }
@@ -115,8 +119,6 @@ watch(visible, () => {
     <ElSpace v-if="isEdit">
       <ElButton @click="openMenuAuthModal">{{ $t('page.manage.role.menuAuth') }}</ElButton>
       <MenuAuthModal v-model:visible="menuAuthVisible" :role-id="roleId" />
-      <ElButton @click="openButtonAuthModal">{{ $t('page.manage.role.buttonAuth') }}</ElButton>
-      <ButtonAuthModal v-model:visible="buttonAuthVisible" :role-id="roleId" />
     </ElSpace>
     <template #footer>
       <ElSpace :size="16">
