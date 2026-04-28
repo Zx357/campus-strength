@@ -24,31 +24,69 @@
 
 ### 后台管理端
 
-![后台登录](imgs/后台登录页.png)
-
-![后台工作台](imgs/后台工作台.png)
-
-![租户管理](imgs/租户管理.png)
-
-![审核中心](imgs/审核中心.png)
-
-![内容管理](imgs/内容管理.png)
+<table>
+  <tr>
+    <td width="50%"><img src="imgs/后台登录页.png" alt="后台登录页" /></td>
+    <td width="50%"><img src="imgs/后台工作台.png" alt="后台工作台" /></td>
+  </tr>
+  <tr>
+    <td align="center">后台登录页</td>
+    <td align="center">后台工作台</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="imgs/租户管理.png" alt="租户管理" /></td>
+    <td width="50%"><img src="imgs/审核中心.png" alt="审核中心" /></td>
+  </tr>
+  <tr>
+    <td align="center">租户管理</td>
+    <td align="center">审核中心</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="imgs/内容管理.png" alt="内容管理" /></td>
+    <td width="50%"></td>
+  </tr>
+  <tr>
+    <td align="center">内容管理</td>
+    <td align="center"></td>
+  </tr>
+</table>
 
 ### 小程序端
 
-![小程序登录](imgs/小程序登录租户选择页.png)
-
-![小程序首页](imgs/小程序首页.png)
-
-![小程序发布页](imgs/小程序发布页.png)
-
-![失物招领页](imgs/失物招领页.png)
-
-![二手闲置页](imgs/二手闲置页.png)
-
-![我的页](imgs/我的页.png)
-
-![详情页](imgs/详情页.png)
+<table>
+  <tr>
+    <td width="50%"><img src="imgs/小程序登录租户选择页.png" alt="小程序登录租户选择页" /></td>
+    <td width="50%"><img src="imgs/小程序首页.png" alt="小程序首页" /></td>
+  </tr>
+  <tr>
+    <td align="center">小程序登录 / 租户选择页</td>
+    <td align="center">小程序首页</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="imgs/小程序发布页.png" alt="小程序发布页" /></td>
+    <td width="50%"><img src="imgs/失物招领页.png" alt="失物招领页" /></td>
+  </tr>
+  <tr>
+    <td align="center">小程序发布页</td>
+    <td align="center">失物招领页</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="imgs/二手闲置页.png" alt="二手闲置页" /></td>
+    <td width="50%"><img src="imgs/我的页.png" alt="我的页" /></td>
+  </tr>
+  <tr>
+    <td align="center">二手闲置页</td>
+    <td align="center">我的页</td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="imgs/详情页.png" alt="详情页" /></td>
+    <td width="50%"></td>
+  </tr>
+  <tr>
+    <td align="center">详情页</td>
+    <td align="center"></td>
+  </tr>
+</table>
 
 ## 技术栈
 
