@@ -1,0 +1,37 @@
+# 依赖目录
+node_modules/
+
+# 构建产物
+dist/
+target/
+.vite/
+.output/
+
+# IDE / 系统文件
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# 日志与临时文件
+*.log
+logs/
+tmp/
+temp/
+
+# 本地运行文件
+*.pid
+*.seed
+*.local
+
+# Maven
+*.class
+
+# 保留明确命名的前端环境配置，忽略临时私有环境文件
+.env
+.env.*.local
+!.env.localhost
+!.env.server
+
+# 上传文件本地存储
+uploads/

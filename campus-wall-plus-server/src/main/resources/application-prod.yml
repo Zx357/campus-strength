@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      database: ${REDIS_DATABASE:0}
+
+campus-wall:
+  upload:
+    local-dir: ${UPLOAD_LOCAL_DIR:/data/campus-wall/uploads}
+    url-prefix: ${UPLOAD_URL_PREFIX:/uploads/}

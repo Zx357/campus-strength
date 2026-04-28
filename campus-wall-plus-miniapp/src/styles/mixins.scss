@@ -1,0 +1,3 @@
+@import './variables.scss';
+@mixin card { background: $card-bg; border-radius: $radius-card; box-shadow: $shadow-card; }
+@mixin row-center { display: flex; align-items: center; }

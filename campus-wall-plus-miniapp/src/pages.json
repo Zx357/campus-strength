@@ -1,0 +1,35 @@
+{
+  "pages": [
+    { "path": "pages/login/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/home/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/publish/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/lost-found/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/lost-found-detail/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/goods/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/goods-detail/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/help/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/help-detail/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/help-publish/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/activity/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/activity-detail/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/message/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/mine/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/post-detail/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/my-publish/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/my-collect/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/my-comments/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/my-reports/index", "style": { "navigationStyle": "custom" } },
+    { "path": "pages/my-signups/index", "style": { "navigationStyle": "custom" } }
+  ],
+  "globalStyle": {
+    "backgroundColor": "#F6F8FA",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "校园墙+"
+  },
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "cw-(.*)": "@/components/cw-$1/index.vue"
+    }
+  }
+}

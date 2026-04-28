@@ -1,0 +1,7 @@
+@import './variables.scss';
+page { min-height: 100%; background: $bg-color; color: $text-main; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+view, text, input, textarea { box-sizing: border-box; }
+.safe-page { min-height: 100vh; padding-bottom: 140rpx; background: $bg-color; }
+.card { background: $card-bg; border-radius: $radius-card; box-shadow: $shadow-card; }
+.primary-btn { height: 88rpx; border-radius: $radius-button; background: linear-gradient(135deg, $primary-color, $primary-dark); color: #fff; display:flex; align-items:center; justify-content:center; font-weight:700; }
+.ghost-btn { height: 88rpx; border-radius: $radius-button; background:#fff; color:$text-main; border: 2rpx solid $border-color; display:flex; align-items:center; justify-content:center; font-weight:700; }
